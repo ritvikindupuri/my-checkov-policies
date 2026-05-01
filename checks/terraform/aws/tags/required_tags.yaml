@@ -1,0 +1,14 @@
+metadata:
+  name: "Ensure all resources have a required Owner tag"
+  id: "CKV_XM_AWS_TAGS_3"
+  category: "GENERAL_SECURITY"
+scope:
+  provider: terraform
+definition:
+  and:
+    - cond_type: attribute
+      resource_types:
+        - aws_instance
+        - aws_s3_bucket
+      attribute: "tags.Owner"
+      operator: exists
