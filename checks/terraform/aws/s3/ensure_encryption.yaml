@@ -1,0 +1,13 @@
+metadata:
+  name: "Ensure S3 bucket has server-side encryption configured"
+  id: "CKV_XM_AWS_S3_1"
+  category: "ENCRYPTION"
+scope:
+  provider: terraform
+definition:
+  and:
+    - cond_type: attribute
+      resource_types:
+        - aws_s3_bucket
+      attribute: server_side_encryption_configuration
+      operator: exists

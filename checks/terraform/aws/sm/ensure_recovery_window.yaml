@@ -1,0 +1,14 @@
+metadata:
+  name: "Ensure Secrets Manager secret deletion recovery window is set to 30 days"
+  id: "CKV_XM_AWS_SM_2"
+  category: "GENERAL_SECURITY"
+scope:
+  provider: terraform
+definition:
+  and:
+    - cond_type: attribute
+      resource_types:
+        - aws_secretsmanager_secret
+      attribute: recovery_window_in_days
+      operator: equals
+      value: "30"

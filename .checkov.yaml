@@ -1,0 +1,12 @@
+# Checkov configuration for this custom-policies repository.
+# Used when running `checkov` from the repo root (e.g., in CI).
+# Scans the test fixtures so the built-in AND custom checks are exercised.
+
+directory:
+  - ./test/resources
+
+external-checks-dir:
+  - ./checks
+
+output: cli
+compact: true

@@ -1,0 +1,10 @@
+#Terraform
+**/.terraform
+**/.terraform.lock.hcl
+**/*.binary
+**/providers.tf
+
+#Python
+__pycache__
+.pytest_cache
+**.egg-info
