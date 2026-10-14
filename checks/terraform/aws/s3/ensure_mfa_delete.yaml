@@ -1,0 +1,17 @@
+metadata:
+  name: "Ensure S3 bucket versioning has MFA delete enabled"
+  id: "CKV_XM_AWS_S3_12"
+  category: "GENERAL_SECURITY"
+scope:
+  provider: terraform
+definition:
+  # MFA delete requires a second factor before a versioned object can be permanently
+  # removed. This is scoped to aws_s3_bucket_versioning, so it only applies where
+  # versioning is declared as its own resource (AWS provider v4+).
+  and:
+    - cond_type: attribute
+      resource_types:
+        - aws_s3_bucket_versioning
+      attribute: "versioning_configuration.mfa_delete"
+      operator: equals
+      value: "Enabled"
