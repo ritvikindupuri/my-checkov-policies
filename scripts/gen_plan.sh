@@ -58,8 +58,37 @@ trap 'rm -rf "$WORK_DIR"' EXIT
 # Copy .tf files from the source dir into the temp workspace
 cp "${TERRAFORM_DIR}"/*.tf "${WORK_DIR}/" 2>/dev/null || true
 
-# Inject the shared providers.tf (overrides any providers.tf in the source dir)
-cp "${SCRIPT_DIR}/providers.tf" "${WORK_DIR}/providers.tf"
+# Inject a providers.tf (overrides any providers.tf in the source dir).
+# A local scripts/providers.tf wins if you have one; otherwise fall back to the
+# default below. Credentials are mock values passed via the environment so that
+# `terraform plan` can run fully offline — nothing is ever authenticated or applied.
+if [[ -f "${SCRIPT_DIR}/providers.tf" ]]; then
+    cp "${SCRIPT_DIR}/providers.tf" "${WORK_DIR}/providers.tf"
+else
+    cat > "${WORK_DIR}/providers.tf" <<'EOF'
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region                      = "us-east-1"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+}
+EOF
+fi
+
+# Satisfy the AWS provider without real credentials. Required even with the
+# skip_* flags above, which only disable the pre-flight validation calls.
+export AWS_ACCESS_KEY_ID="mock"
+export AWS_SECRET_ACCESS_KEY="mock"
+export AWS_DEFAULT_REGION="us-east-1"
 
 # ── run ───────────────────────────────────────────────────────────────────────
 

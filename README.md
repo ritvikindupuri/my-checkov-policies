@@ -96,6 +96,19 @@ test/resources/terraform/{service}/{check_name}/fail/main.tf
 test/resources/terraform/{service}/{check_name}/fail/tfplan.json
 ```
 
+A `pass/` and a `fail/` directory are required for every check — CI fails a pull request if
+either is missing, or if either lacks its `main.tf` or `tfplan.json`. Additional variant
+directories (for example `pass_separate_resource/`) are allowed alongside them when a check
+has more than one compliant or non-compliant shape worth covering.
+
+Generate the `tfplan.json` files with [scripts/gen_plan.sh](scripts/gen_plan.sh), which runs
+`terraform init`/`plan`/`show -json` in a temp workspace using mock credentials, so nothing
+is ever authenticated or applied:
+
+```bash
+./scripts/gen_plan.sh test/resources/terraform/{service}/{check_name}/pass
+```
+
 #### 3. Write the test
 
 When adding a test class, make sure to follow this test directory structure: `test/terraform/{service}/test_{service}.py`

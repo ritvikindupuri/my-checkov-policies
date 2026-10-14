@@ -1,0 +1,17 @@
+metadata:
+  name: "Ensure S3 bucket does not enable force_destroy"
+  id: "CKV_XM_AWS_S3_11"
+  category: "GENERAL_SECURITY"
+scope:
+  provider: terraform
+definition:
+  # force_destroy lets `terraform destroy` delete a bucket that still holds objects,
+  # which makes accidental data loss a single apply away. The attribute is optional and
+  # defaults to false, so a bucket that omits it satisfies this check.
+  and:
+    - cond_type: attribute
+      resource_types:
+        - aws_s3_bucket
+      attribute: force_destroy
+      operator: not_equals
+      value: "true"
