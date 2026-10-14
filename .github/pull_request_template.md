@@ -18,7 +18,7 @@
 
 - [ ] The ID follows `CKV_XM_AWS_{SERVICE}_{NUMBER}` and is not already in use
 - [ ] The ID does **not** use the `CKV2_` prefix — checkov reserves that for its own graph checks
-- [ ] This is not already covered by a built-in checkov check <!-- a custom policy that duplicates a built-in one just double-reports -->
+- [ ] This is not already covered by a built-in checkov check
 - [ ] Added a row to `checks/CHECKS.md` with a one-line summary and a link to the tests
 
 ### Fixtures and tests
