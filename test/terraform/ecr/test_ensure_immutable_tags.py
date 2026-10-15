@@ -29,6 +29,26 @@ def _scan_plan(plan_file: Path, check_id: str) -> list[CheckResult]:
     return [r.check_result["result"] for r in report.passed_checks + report.failed_checks]
 
 
+def _scan_by_resource(tf_dir: Path, check_id: str) -> dict[str, CheckResult]:
+    runner = Runner()
+    report = runner.run(
+        root_folder=str(tf_dir),
+        external_checks_dir=[str(CHECKS_DIR)],
+        runner_filter=RunnerFilter(checks=[check_id]),
+    )
+    return {r.resource: r.check_result["result"] for r in report.passed_checks + report.failed_checks}
+
+
+def _scan_plan_by_resource(plan_file: Path, check_id: str) -> dict[str, CheckResult]:
+    runner = TFPlanRunner()
+    report = runner.run(
+        files=[str(plan_file)],
+        external_checks_dir=[str(CHECKS_DIR)],
+        runner_filter=RunnerFilter(checks=[check_id]),
+    )
+    return {r.resource: r.check_result["result"] for r in report.passed_checks + report.failed_checks}
+
+
 class TestEnsureImmutableTags:
     """CKV_XM_AWS_ECR_41 — aws_ecr_repository must have image_tag_mutability set to IMMUTABLE."""
 
@@ -38,14 +58,20 @@ class TestEnsureImmutableTags:
         results = _scan(RESOURCES_DIR / "pass", self.CHECK_ID)
         assert results == [CheckResult.PASSED]
 
-    def test_repository_with_mutable_tags_fails(self):
-        results = _scan(RESOURCES_DIR / "fail", self.CHECK_ID)
-        assert results == [CheckResult.FAILED]
+    def test_repository_non_compliant_cases_fail(self):
+        results = _scan_by_resource(RESOURCES_DIR / "fail", self.CHECK_ID)
+        assert results["aws_ecr_repository.fail_mutable"] == CheckResult.FAILED
+        assert results["aws_ecr_repository.fail_missing_mutability"] == CheckResult.FAILED
+        assert results["aws_ecr_repository.fail_immutable_with_exclusion"] == CheckResult.FAILED
+        assert results["aws_ecr_repository.fail_mutable_with_exclusion"] == CheckResult.FAILED
 
     def test_repository_with_immutable_tags_passes_plan(self):
         results = _scan_plan(RESOURCES_DIR / "pass" / "tfplan.json", self.CHECK_ID)
         assert results == [CheckResult.PASSED]
 
-    def test_repository_with_mutable_tags_fails_plan(self):
-        results = _scan_plan(RESOURCES_DIR / "fail" / "tfplan.json", self.CHECK_ID)
-        assert results == [CheckResult.FAILED]
+    def test_repository_non_compliant_cases_fail_plan(self):
+        results = _scan_plan_by_resource(RESOURCES_DIR / "fail" / "tfplan.json", self.CHECK_ID)
+        assert results["aws_ecr_repository.fail_mutable"] == CheckResult.FAILED
+        assert results["aws_ecr_repository.fail_missing_mutability"] == CheckResult.FAILED
+        assert results["aws_ecr_repository.fail_immutable_with_exclusion"] == CheckResult.FAILED
+        assert results["aws_ecr_repository.fail_mutable_with_exclusion"] == CheckResult.FAILED
