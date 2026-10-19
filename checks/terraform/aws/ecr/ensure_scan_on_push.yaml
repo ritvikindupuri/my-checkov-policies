@@ -1,0 +1,17 @@
+# Intentionally requires image_scanning_configuration.scan_on_push = true.
+# Repositories with scan_on_push disabled or omitting image_scanning_configuration are rejected.
+metadata:
+  name: "Ensure ECR repository has image scan on push enabled"
+  id: "CKV_XM_AWS_ECR_4"
+  category: "GENERAL_SECURITY"
+  severity: "MEDIUM"
+scope:
+  provider: terraform
+definition:
+  and:
+    - cond_type: attribute
+      resource_types:
+        - aws_ecr_repository
+      attribute: image_scanning_configuration.scan_on_push
+      operator: equals
+      value: "true"
