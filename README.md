@@ -47,6 +47,9 @@ mcp -f main.tf
 # Run only specific checks
 mcp -d /path/to/terraform --check CKV_XM_AWS_S3_1
 
+# Run only checks at or above a severity
+mcp -d /path/to/terraform --check HIGH
+
 # Skip specific checks
 mcp -d /path/to/terraform --skip-check CKV_AWS_18
 
@@ -69,6 +72,7 @@ metadata:
   name: "Human-readable description"
   id: "CKV_XM_AWS_{SERVICE}_{NUMBER}"
   category: "ENCRYPTION"   # or GENERAL_SECURITY, LOGGING, etc.
+  severity: "HIGH"         # CRITICAL, HIGH, MEDIUM, or LOW
 scope:
   provider: terraform
 definition:

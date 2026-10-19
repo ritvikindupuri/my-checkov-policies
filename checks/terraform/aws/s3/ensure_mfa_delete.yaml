@@ -2,6 +2,7 @@ metadata:
   name: "Ensure S3 bucket versioning has MFA delete enabled"
   id: "CKV_XM_AWS_S3_12"
   category: "GENERAL_SECURITY"
+  severity: "MEDIUM"
 scope:
   provider: terraform
 definition:

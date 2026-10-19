@@ -2,6 +2,7 @@ metadata:
   name: "Ensure S3 bucket has server-side encryption configured"
   id: "CKV_XM_AWS_S3_1"
   category: "ENCRYPTION"
+  severity: "HIGH"
 scope:
   provider: terraform
 definition:
