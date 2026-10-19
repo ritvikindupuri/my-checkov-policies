@@ -1,3 +1,5 @@
+# Intentionally enforces strict equality to IMMUTABLE only.
+# No other values (MUTABLE, MUTABLE_WITH_EXCLUSION, IMMUTABLE_WITH_EXCLUSION, or omitted) are accepted.
 metadata:
   name: "Ensure ECR repository has image tag mutability set to IMMUTABLE"
   id: "CKV_XM_AWS_ECR_41"

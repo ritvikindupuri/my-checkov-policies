@@ -60,6 +60,8 @@ class TestEnsureImmutableTags:
 
     def test_repository_non_compliant_cases_fail(self):
         results = _scan_by_resource(RESOURCES_DIR / "fail", self.CHECK_ID)
+        assert len(results) == 4
+        assert CheckResult.PASSED not in results.values()
         assert results["aws_ecr_repository.fail_mutable"] == CheckResult.FAILED
         assert results["aws_ecr_repository.fail_missing_mutability"] == CheckResult.FAILED
         assert results["aws_ecr_repository.fail_immutable_with_exclusion"] == CheckResult.FAILED
@@ -71,6 +73,8 @@ class TestEnsureImmutableTags:
 
     def test_repository_non_compliant_cases_fail_plan(self):
         results = _scan_plan_by_resource(RESOURCES_DIR / "fail" / "tfplan.json", self.CHECK_ID)
+        assert len(results) == 4
+        assert CheckResult.PASSED not in results.values()
         assert results["aws_ecr_repository.fail_mutable"] == CheckResult.FAILED
         assert results["aws_ecr_repository.fail_missing_mutability"] == CheckResult.FAILED
         assert results["aws_ecr_repository.fail_immutable_with_exclusion"] == CheckResult.FAILED
