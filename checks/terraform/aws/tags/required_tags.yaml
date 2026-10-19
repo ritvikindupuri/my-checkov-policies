@@ -2,6 +2,7 @@ metadata:
   name: "Ensure all resources have a required Owner tag"
   id: "CKV_XM_AWS_TAGS_3"
   category: "GENERAL_SECURITY"
+  severity: "LOW"
 scope:
   provider: terraform
 definition:

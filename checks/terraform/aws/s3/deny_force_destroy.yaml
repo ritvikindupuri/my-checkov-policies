@@ -2,6 +2,7 @@ metadata:
   name: "Ensure S3 bucket does not enable force_destroy"
   id: "CKV_XM_AWS_S3_11"
   category: "GENERAL_SECURITY"
+  severity: "MEDIUM"
 scope:
   provider: terraform
 definition:
