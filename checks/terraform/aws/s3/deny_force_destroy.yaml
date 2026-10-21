@@ -3,6 +3,7 @@ metadata:
   id: "CKV_XM_AWS_S3_11"
   category: "GENERAL_SECURITY"
   severity: "MEDIUM"
+  guideline: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/delete-bucket.html"
 scope:
   provider: terraform
 definition:

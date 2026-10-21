@@ -3,6 +3,7 @@ metadata:
   id: "CKV_XM_AWS_S3_1"
   category: "ENCRYPTION"
   severity: "HIGH"
+  guideline: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html"
 scope:
   provider: terraform
 definition:

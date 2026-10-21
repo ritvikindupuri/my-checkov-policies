@@ -55,8 +55,8 @@ class TestEnsureScanOnPush:
     CHECK_ID = "CKV_XM_AWS_ECR_4"
 
     def test_repository_with_scan_on_push_passes(self):
-        results = _scan(RESOURCES_DIR / "pass", self.CHECK_ID)
-        assert results == [CheckResult.PASSED]
+        results = _scan_by_resource(RESOURCES_DIR / "pass", self.CHECK_ID)
+        assert results == {"aws_ecr_repository.pass": CheckResult.PASSED}
 
     def test_repository_non_compliant_cases_fail(self):
         results = _scan_by_resource(RESOURCES_DIR / "fail", self.CHECK_ID)
@@ -66,8 +66,8 @@ class TestEnsureScanOnPush:
         assert results["aws_ecr_repository.fail_missing_scanning_config"] == CheckResult.FAILED
 
     def test_repository_with_scan_on_push_passes_plan(self):
-        results = _scan_plan(RESOURCES_DIR / "pass" / "tfplan.json", self.CHECK_ID)
-        assert results == [CheckResult.PASSED]
+        results = _scan_plan_by_resource(RESOURCES_DIR / "pass" / "tfplan.json", self.CHECK_ID)
+        assert results == {"aws_ecr_repository.pass": CheckResult.PASSED}
 
     def test_repository_non_compliant_cases_fail_plan(self):
         results = _scan_plan_by_resource(RESOURCES_DIR / "fail" / "tfplan.json", self.CHECK_ID)
@@ -75,3 +75,19 @@ class TestEnsureScanOnPush:
         assert CheckResult.PASSED not in results.values()
         assert results["aws_ecr_repository.fail_scan_disabled"] == CheckResult.FAILED
         assert results["aws_ecr_repository.fail_missing_scanning_config"] == CheckResult.FAILED
+
+    def test_repository_inside_module_passes(self):
+        results = _scan_by_resource(RESOURCES_DIR / "module", self.CHECK_ID)
+        assert len(results) == 1
+        assert list(results.values()) == [CheckResult.PASSED]
+        assert any("aws_ecr_repository.module_repo" in k for k in results)
+
+    def test_non_ecr_resources_ignored(self):
+        # Confirms check does not inadvertently evaluate non-ECR resources if resource_types is modified
+        results = _scan_by_resource(RESOURCES_DIR / "non_ecr", self.CHECK_ID)
+        assert results == {}
+
+    def test_unresolved_variable_drops_from_directory_scan(self):
+        # Pins Checkov limitation: unresolved variables with no default drop out of directory scans
+        results = _scan_by_resource(RESOURCES_DIR / "unresolved_var", self.CHECK_ID)
+        assert results == {}
