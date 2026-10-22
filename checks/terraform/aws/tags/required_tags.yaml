@@ -3,6 +3,7 @@ metadata:
   id: "CKV_XM_AWS_TAGS_3"
   category: "GENERAL_SECURITY"
   severity: "LOW"
+  guideline: "https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html"
 scope:
   provider: terraform
 definition:

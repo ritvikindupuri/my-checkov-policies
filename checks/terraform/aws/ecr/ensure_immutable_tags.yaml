@@ -5,6 +5,7 @@ metadata:
   id: "CKV_XM_AWS_ECR_41"
   category: "GENERAL_SECURITY"
   severity: "HIGH"
+  guideline: "https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html"
 scope:
   provider: terraform
 definition:

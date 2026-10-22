@@ -1,0 +1,25 @@
+# Intentionally requires image_scanning_configuration.scan_on_push = true.
+# Repositories with scan_on_push disabled or omitting image_scanning_configuration are rejected.
+#
+# Note on unresolved dynamic variables:
+# In Checkov's directory runner (HCL), if scan_on_push = var.something where the variable has
+# no default value or tfvars supplied, Checkov cannot resolve the expression and silently drops
+# the resource from the scan report rather than flagging it.
+# To ensure enforcement when using dynamic variables, run Checkov against the compiled Terraform
+# execution plan (tfplan.json), where Terraform resolves all variables and provider defaults.
+metadata:
+  name: "Ensure ECR repository has image scan on push enabled"
+  id: "CKV_XM_AWS_ECR_4"
+  category: "GENERAL_SECURITY"
+  severity: "MEDIUM"
+  guideline: "https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html"
+scope:
+  provider: terraform
+definition:
+  and:
+    - cond_type: attribute
+      resource_types:
+        - aws_ecr_repository
+      attribute: image_scanning_configuration.scan_on_push
+      operator: equals
+      value: "true"

@@ -3,6 +3,7 @@ metadata:
   id: "CKV_XM_AWS_S3_12"
   category: "GENERAL_SECURITY"
   severity: "MEDIUM"
+  guideline: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiFactorAuthenticationDelete.html"
 scope:
   provider: terraform
 definition:

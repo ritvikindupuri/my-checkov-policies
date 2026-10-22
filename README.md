@@ -73,6 +73,7 @@ metadata:
   id: "CKV_XM_AWS_{SERVICE}_{NUMBER}"
   category: "ENCRYPTION"   # or GENERAL_SECURITY, LOGGING, etc.
   severity: "HIGH"         # CRITICAL, HIGH, MEDIUM, or LOW
+  guideline: "https://docs.aws.amazon.com/..." # link to official remediation docs
 scope:
   provider: terraform
 definition:

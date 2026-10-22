@@ -3,6 +3,7 @@ metadata:
   id: "CKV_XM_AWS_SM_2"
   category: "GENERAL_SECURITY"
   severity: "LOW"
+  guideline: "https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_delete-secret.html"
 scope:
   provider: terraform
 definition:
